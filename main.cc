@@ -7,16 +7,17 @@
 // uses version 4.2.1 ??? TToTT
 double hit_sphere( const point3& center, double radius, const ray& r ) {
   // r^2 = (t^2 * b . b ) + 2tb ( A - C ) + (a - c )^2
+  vec3 oc = r.origin() - center;
   double a = r.direction().length_squared();
-  double b = 2*dot( r.direction(), r.origin() - center );
-  double c = dot( r.origin() - center, r.origin() - center ) - radius*radius;
+  double hb = dot( r.direction(), oc );
+  double c = oc.length_squared() - radius*radius;
 
-  double discriminant = b*b - 4*a*c;
+  double discriminant = hb*hb - a*c;
   if( discriminant < 0 ) {
     return -1.0;
   }
   else {
-    return ( -b - sqrt( discriminant ) ) / 4*a*c;
+    return ( -hb - sqrt( discriminant ) ) / a;
   }
 }
 
