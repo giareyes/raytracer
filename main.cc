@@ -5,7 +5,19 @@
 
 // compile with g++ -std=c++11 main.cc -o main because for some reason the default g++ on my computer
 // uses version 4.2.1 ??? TToTT
+bool hit_sphere( const point3& center, double radius, const ray& r ) {
+  // r^2 = (t^2 * b . b ) + 2tb ( A - C ) + (a - c )^2
+  double a = r.direction().length_squared();
+  double b = 2*dot( r.direction(), r.origin() - center );
+  double c = dot( r.origin() - center, r.origin() - center ) - radius*radius;
+
+  double discriminant = b*b - 4*a*c;
+  return discriminant > 0;
+}
+
 color ray_color( const ray& r ) {
+  if( hit_sphere( point3( 0, 0, -1 ), 0.5, r ) )
+    return color( 1.0, 0, 0 );
   vec3 unit_direction = unit_vector( r.direction() );
   auto t = 0.5*( unit_direction.y() + 1 );
   return ( 1.0 - t )*color( 1.0, 1.0, 1.0 ) + t*color( 0.5, 0.7, 1.0 );
@@ -37,7 +49,7 @@ int main() {
       auto v = double(j) / (image_height-1);
       ray r( origin, lower_left_corner + u*horizontal + v*vertical - origin );
       color pixel_color = ray_color( r );
-      
+
       write_color( std::cout, pixel_color );
     }
   }
