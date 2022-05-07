@@ -1,10 +1,7 @@
-#include <iostream>
-#include "vec3.h"
 #include "ray.h"
 #include "color.h"
 #include "sphere.h"
 #include "hittable_list.h"
-#include "gen_library.h"
 #include "camera.h"
 
 // compile with g++ -std=c++11 main.cc -o main because for some reason the default g++ on my computer

@@ -2,8 +2,6 @@
 #define COLOR_H
 
 #include "vec3.h"
-#include "gen_library.h"
-#include <iostream>
 
 void write_color( std::ostream &out, color pixel_color, int samples_per_pixel) {
   auto scale = 1.0 / samples_per_pixel;

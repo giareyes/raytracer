@@ -2,7 +2,7 @@
 #define VEC3_H
 
 #include <cmath>
-#include <iostream>
+#include "gen_library.h"
 
 using std::sqrt;
 
@@ -74,6 +74,12 @@ inline vec3 cross(const vec3 &u, const vec3 &v) {
 }
 inline vec3 unit_vector(vec3 v) {
   return v / v.length();
+}
+inline vec3 random_vec() {
+    return vec3( random_double(), random_double(), random_double() );
+}
+inline vec3 random_vec( double min, double max ) {
+    return vec3( random_double( min, max ), random_double( min, max ), random_double( min, max ) );
 }
 
 #endif
