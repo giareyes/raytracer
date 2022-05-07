@@ -82,4 +82,13 @@ inline vec3 random_vec( double min, double max ) {
     return vec3( random_double( min, max ), random_double( min, max ), random_double( min, max ) );
 }
 
+vec3 random_in_sphere() {
+  while( true )
+  {
+    vec3 random_pt = random_vec( -1, 1 );
+    if( random_pt.length_squared() >= 1 ) continue;
+    return random_pt;
+  }
+}
+
 #endif
