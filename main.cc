@@ -10,19 +10,18 @@
 // depth param used to prevent recursion from lasting too long
 color ray_color( const ray& r, const hittable_list& world, int depth ) {
   // if we have recursed for too long, there is no more color to accumulate and we return black
-  if( depth <= 0 )
-    return color( 0, 0, 0 );
-
+  if( depth <= 0 ) return color( 0, 0, 0 );
   hit_record rec;
+
   // use 0.001 to prevent near hits from being factored in
   if( world.hit( r, 0.001, infinity, rec ) )
   {
     // when we hit a diffuse object, the ray is scattered
-    point3 random_pt = random_in_sphere();
-    point3 diffuse_target = rec.p + rec.normal + random_pt;
+    point3 diffuse_target = rec.p + rec.normal + random_unit_vector();
     return 0.5*ray_color( ray( rec.p,  diffuse_target - rec.p ), world, depth - 1 );
   }
 
+  // if we do not hit any surfaces
   vec3 unit_direction = unit_vector( r.direction() );
   auto t = 0.5*( unit_direction.y() + 1 );
   return ( 1.0 - t )*color( 1.0, 1.0, 1.0 ) + t*color( 0.5, 0.7, 1.0 );

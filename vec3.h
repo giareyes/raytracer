@@ -82,7 +82,7 @@ inline vec3 random_vec( double min, double max ) {
     return vec3( random_double( min, max ), random_double( min, max ), random_double( min, max ) );
 }
 
-vec3 random_in_sphere() {
+vec3 random_in_unit_sphere() {
   while( true )
   {
     vec3 random_pt = random_vec( -1, 1 );
@@ -90,5 +90,7 @@ vec3 random_in_sphere() {
     return random_pt;
   }
 }
+
+vec3 random_unit_vector() { return( unit_vector( random_in_unit_sphere() ) ); }
 
 #endif
