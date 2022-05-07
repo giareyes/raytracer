@@ -3,6 +3,7 @@
 #include "sphere.h"
 #include "hittable_list.h"
 #include "camera.h"
+#include "material.h"
 
 // compile with g++ -std=c++11 main.cc -o main because for some reason the default g++ on my computer
 // uses version 4.2.1 ??? TToTT
@@ -16,9 +17,12 @@ color ray_color( const ray& r, const hittable_list& world, int depth ) {
   // use 0.001 to prevent near hits from being factored in
   if( world.hit( r, 0.001, infinity, rec ) )
   {
-    // when we hit a diffuse object, the ray is scattered
-    point3 diffuse_target = rec.p + rec.normal + random_unit_vector();
-    return 0.5*ray_color( ray( rec.p,  diffuse_target - rec.p ), world, depth - 1 );
+    ray scattered;
+    color attenuation;
+    if( rec.mat_ptr->scatter( r, rec, attenuation, scattered ) )
+      return attenuation*ray_color( scattered, world, depth - 1 );
+
+    return color( 0, 0, 0 );
   }
 
   // if we do not hit any surfaces
@@ -36,8 +40,8 @@ int main() {
   const int max_depth = 50;
   // world
   hittable_list world;
-  world.add( make_shared<sphere>( point3( 0, 0, -1 ), 0.5 ) );
-  world.add( make_shared<sphere>( point3( 0, -100.5, -1 ), 100 ) );
+  world.add( make_shared<sphere>( point3( 0, 0, -1 ), 0.5, make_shared<lambertian>( color( 0.7, 0.3, 0.3 ) ) ) );
+  world.add( make_shared<sphere>( point3( 0, -100.5, -1 ), 100, make_shared<lambertian>( color( 0.8, 0.8, 0.0 ) ) ) );
 
   //camera
   camera c;
