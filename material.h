@@ -51,7 +51,17 @@ class dielectric : public material {
 
     virtual bool scatter( const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered ) const override {
       double index_ratio = rec.front_face ? 1.0 / ir : ir;
-      vec3 scatter_direction = refract( unit_vector( r_in.direction() ), rec.normal, index_ratio );
+      vec3 unit_dir = unit_vector( r_in.direction() );
+      double cos_theta = fmin( dot( -unit_dir, rec.normal ), 1.0  );
+      double sin_theta = sqrt( 1.0 - cos_theta*cos_theta );
+      vec3 scatter_direction;
+      if( index_ratio*sin_theta > 1 ) {
+        scatter_direction = reflect( unit_dir, rec.normal );
+      }
+      else {
+        scatter_direction = refract( unit_dir, rec.normal, index_ratio );
+      }
+
       scattered = ray( rec.p,  scatter_direction );
       attenuation = color( 1.0, 1.0, 1.0 );
       return true;
