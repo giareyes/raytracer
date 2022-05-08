@@ -45,4 +45,20 @@ class metal : public material {
     double fuzz;
 };
 
+class dielectric : public material {
+  public:
+    dielectric( const double index_of_refraction ) : ir( index_of_refraction ) {}
+
+    virtual bool scatter( const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered ) const override {
+      double index_ratio = rec.front_face ? 1.0 / ir : ir;
+      vec3 scatter_direction = refract( unit_vector( r_in.direction() ), rec.normal, index_ratio );
+      scattered = ray( rec.p,  scatter_direction );
+      attenuation = color( 1.0, 1.0, 1.0 );
+      return true;
+    };
+
+  public:
+    double ir;
+};
+
 #endif

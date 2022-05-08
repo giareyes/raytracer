@@ -107,4 +107,11 @@ vec3 reflect( const vec3& v, const vec3& n ) {
   return v - 2*dot( v, n )*n;
 }
 
+vec3 refract( const vec3& uv, const vec3& n, const double etai_over_etat ) {
+  // check why we have a min
+  vec3 r_perpendicular = etai_over_etat * ( uv + fmin( dot( -uv, n ), 1.0 )*n );
+  vec3 r_parallel = -1*sqrt( fabs( 1 - r_perpendicular.length_squared() ) )*n;
+  return r_perpendicular + r_parallel;
+}
+
 #endif
