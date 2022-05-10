@@ -99,6 +99,14 @@ vec3 random_in_unit_sphere() {
 
 vec3 random_unit_vector() { return( unit_vector( random_in_unit_sphere() ) ); }
 
+vec3 random_in_unit_disk() {
+  while( true )
+  {
+    vec3 random_pt = vec3( random_double( -1, 1 ), random_double( -1, 1 ), 0 );
+    if( random_pt.length_squared() >= 1 ) continue;
+    return random_pt;
+  }
+}
 // n is normal to a surface, v is the entering ray. if the angle between v and n is theta,
 // then the angle the reflected v makes with the surface is 90-theta. the magnitude of the vector
 // B, which is perpendicular to the surface and touches the end of v, is || v || sin( 90 - theta )
